@@ -10,6 +10,13 @@
 
 <body>
     <h1>create</h1>
+
+    <form action="{{ url('') }}">
+        <input type="text" name="name" placeholder="Name">
+        <button type="submit">
+            Submit
+        </button>
+    </form>
 </body>
 
 </html>
