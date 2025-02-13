@@ -14,6 +14,7 @@ class PositionSeeder extends Seeder
     {
         Position::create([
             'position' => 'Software Engineer',
+            'salary' => 10000000,
         ]);
     }
 }

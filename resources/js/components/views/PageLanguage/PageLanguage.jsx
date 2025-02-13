@@ -1,34 +1,35 @@
 import { Button, Flex, Table } from "antd";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Header from "../../layouts/Header";
+import apiUrl from "../../providers/apiUrl";
 import axios from "axios";
 import dayjs from "dayjs";
 
-import apiUrl from "../../providers/apiUrl";
-import Header from "../../layouts/Header";
-
-export default function PagePosition() {
+export default function PageLanguage() {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [dataSource, setDataSource] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchData = async () => {
-        const response = await axios.get(apiUrl("api/positions"));
+        const response = await axios.get(apiUrl("api/languages"));
 
         if (response.status === 200) {
             setDataSource(response.data.data);
         }
     };
+
     useEffect(() => {
         fetchData();
 
         return () => {};
     }, []);
 
-    const handleDelete = (position) => {
+    const handleDelete = (language) => {
         axios
-            .delete(apiUrl("api/positions/" + position.id))
+            .delete(apiUrl("api/languages/" + language.id))
             .then((response) => {
                 if (response.status === 200) {
                     let data = response.data;
@@ -41,28 +42,17 @@ export default function PagePosition() {
                     }
                 }
                 setIsLoading(false);
-            })
-            .catch((error) => {
-                console.log("error", error);
-
-                if (error.response) {
-                    alert(error.response.data.message);
-                } else {
-                    alert(error.message);
-                }
-
-                setIsLoading(false);
             });
     };
 
     return (
         <div>
             <Header />
-            <Button type="primary" onClick={() => navigate("/position/form")}>
-                Add Position
+            <Button type="primary" onClick={() => navigate("/language/form")}>
+                Add Language
             </Button>
             <hr />
-            <h1>Page Position</h1>
+            <h1>Page Language</h1>
 
             <Table
                 rowKey={(record) => record.id}
@@ -70,18 +60,19 @@ export default function PagePosition() {
                 columns={[
                     {
                         title: "Action",
-                        key: "Action",
+                        key: "action",
                         render: (text, record) => (
                             <Flex gap={2}>
                                 <Button
                                     onClick={() =>
-                                        navigate("/position/form/" + record.id)
+                                        navigate("/language/form/" + record.id)
                                     }
                                 >
                                     Edit
                                 </Button>
                                 <Button
                                     onClick={() => handleDelete(record)}
+                                    loading={isLoading}
                                     danger
                                 >
                                     Delete
@@ -90,9 +81,9 @@ export default function PagePosition() {
                         ),
                     },
                     {
-                        title: "Position",
-                        dataIndex: "position",
-                        key: "position",
+                        title: "Language",
+                        dataIndex: "language",
+                        key: "language",
                     },
                     {
                         title: "Created At",
@@ -100,11 +91,6 @@ export default function PagePosition() {
                         key: "created_at",
                         render: (text, _) =>
                             text ? dayjs(text).format("DD/MM/YYYY") : null,
-                    },
-                    {
-                        title: "Salary",
-                        dataIndex: "salary",
-                        key: "salary",
                     },
                 ]}
             />

@@ -104,6 +104,11 @@ export default function PageUser() {
                         key: "email",
                     },
                     {
+                        title: "Position",
+                        dataIndex: "position",
+                        key: "position",
+                    },
+                    {
                         title: "Created At",
                         dataIndex: "created_at",
                         key: "created_at",

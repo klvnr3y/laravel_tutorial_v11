@@ -18,5 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PositionSeeder::class,
         ]);
+
+        $this->call([
+            LanguageSeeder::class,
+        ]);
     }
 }

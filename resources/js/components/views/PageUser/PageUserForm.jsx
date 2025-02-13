@@ -1,8 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import apiUrl from "../../providers/apiUrl";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Select } from "antd";
 
 export default function PageUserForm() {
     const navigate = useNavigate();
@@ -10,6 +10,21 @@ export default function PageUserForm() {
     const params = useParams();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [positions, setPosition] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await axios.get(apiUrl("api/positions"));
+
+            if (response.status === 200) {
+                setPosition(response.data.data);
+            }
+        };
+
+        fetchData();
+
+        return () => {};
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -82,7 +97,7 @@ export default function PageUserForm() {
 
     return (
         <div>
-            <button onClick={() => navigate(-1)}>Back</button>
+            <Button onClick={() => navigate(-1)}>Back</Button>
             <h1>PageUserForm</h1>
 
             <Form onFinish={onFinish}>
@@ -95,8 +110,24 @@ export default function PageUserForm() {
                 <Form.Item name="password" label="Password">
                     <Input type="password" />
                 </Form.Item>
+
+                <Select
+                    placeholder="Select a Position"
+                    style={{ width: "100%" }}
+                >
+                    {positions.map((position) => (
+                        <Select.Option key={position.id} value={position.id}>
+                            {position.position}
+                        </Select.Option>
+                    ))}
+                </Select>
+
                 <div>
-                    <Button htmlType="submit" loading={isLoading}>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={isLoading}
+                    >
                         Submit
                     </Button>
                 </div>

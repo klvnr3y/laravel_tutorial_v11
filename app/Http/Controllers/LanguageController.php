@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Language;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
+class LanguageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = User::all();
+        //
+        $data = Language::all();
 
         $ret = [
             "success" => true,
@@ -28,28 +28,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        //
         $ret = [
             "success" => false,
             "message" => "Data not " . ($request->id ? "update" : "create")
         ];
 
         $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . ($request->id ?? 'NULL') . ',id',
+            'language' => 'required',
+
         ]);
 
-
-        if (!$request->id) {
-            $request->validate([
-                'password' => 'required'
-            ]);
-        }
-
-        if ($request->password) {
-            $data['password'] = Hash::make($request->password);
-        }
-
-        $createUpdate = User::updateOrCreate(
+        $createUpdate = Language::updateOrCreate(
             ['id' => $request->id ?? null],
             $data
         );
@@ -67,9 +57,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Language $language)
     {
-        $data = User::find($id);
+        //
+        $data = Language::find($language);
 
         $ret = [
             "success" => true,
@@ -82,9 +73,10 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Language $language)
     {
         //
+
     }
 
     /**
@@ -92,12 +84,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        //
         $ret = [
             "success" => false,
             "message" => "Data not deleted"
         ];
 
-        $data = User::find($id);
+        $data = Language::find($id);
 
         if ($data) {
             $data->delete();
